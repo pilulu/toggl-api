@@ -997,7 +997,7 @@ class TogglApi
      */
     public function updateTagsForTimeEntries($timeEntryIds, $entry)
     {
-        return $this->PUT('time_entries/'.implode(',', $timeEntryIds), ['time_entry' => $entry]);
+        return $this->PUT('time_entries/'.implode(',', $timeEntryIds), $entry);
     }
 
     /**
