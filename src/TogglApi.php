@@ -927,7 +927,7 @@ class TogglApi
      */
     public function startTimeEntry($entry)
     {
-        return $this->POST('time_entries/start', ['time_entry' => $entry]);
+        return $this->POST('time_entries/start', $entry);
     }
 
     /**
