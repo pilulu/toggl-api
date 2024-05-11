@@ -24,27 +24,23 @@ class TogglReportsApi
     protected $client;
 
     /**
+     * @var mixed
+     */
+    private $workspaceId;
+
+    /**
      * TogglReportsApi constructor.
      *
      * @param string $apiToken
      */
-    public function __construct($apiToken)
+    public function __construct($apiToken, $workspaceId)
     {
         $this->apiToken = $apiToken;
+        $this->workspaceId = $workspaceId;
         $this->client = new Client([
-            'base_uri' => 'https://api.track.toggl.com/reports/api/v2/',
+            'base_uri' => 'https://api.track.toggl.com/reports/api/v3/',
             'auth' => [$this->apiToken, 'api_token'],
         ]);
-    }
-
-    /**
-     * Get available endpoints.
-     *
-     * @return bool|mixed|object
-     */
-    public function getAvailableEndpoints()
-    {
-        return $this->get('');
     }
 
     /**
@@ -68,7 +64,7 @@ class TogglReportsApi
      */
     public function getSummaryReport($query)
     {
-        return $this->get('summary', $query);
+        return $this->post("workspace/{$this->workspaceId}/summary/time_entries", $query);
     }
 
     /**
@@ -80,7 +76,7 @@ class TogglReportsApi
      */
     public function getDetailsReport($query)
     {
-        return $this->get('details', $query);
+        return $this->post("workspace/{$this->workspaceId}/search/time_entries", $query);
     }
 
     /**
@@ -92,7 +88,7 @@ class TogglReportsApi
      */
     public function getWeeklyReport($query)
     {
-        return $this->get('weekly', $query);
+        return $this->post("workspace/{$this->workspaceId}/weekly/time_entries", $query);
     }
 
     /**
