@@ -114,23 +114,24 @@ class TogglReportsApi
     }
 
     /**
-     * Helper for client post command.
+     * Wrapper for client post command.
      *
      * @param string $endpoint
+     * @param array $body
      * @param array $query
      *
      * @return bool|mixed|object
      */
-    private function POST($endpoint, $query = array())
+    private function POST($endpoint, $body = array(), $query = array())
     {
         try {
-            $response = $this->client->post($endpoint, ['query' => $query]);
+            $response = $this->client->post($endpoint, ['body' => json_encode($body), 'query' => $query]);
 
             return $this->checkResponse($response);
         } catch (ClientException $e) {
             return (object) [
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => $e->getResponse()->getBody()->getContents(),
             ];
         }
     }
