@@ -907,7 +907,7 @@ class TogglApi
      */
     public function createTimeEntry($entry)
     {
-        return $this->POST('time_entries', ['time_entry' => $entry]);
+        return $this->POST('time_entries', $entry);
     }
 
     /**
@@ -919,7 +919,7 @@ class TogglApi
      */
     public function startTimeEntry($entry)
     {
-        return $this->POST('time_entries/start', ['time_entry' => $entry]);
+        return $this->POST('time_entries/start', $entry);
     }
 
     /**
@@ -989,7 +989,7 @@ class TogglApi
      */
     public function updateTagsForTimeEntries($timeEntryIds, $entry)
     {
-        return $this->PUT('time_entries/'.implode(',', $timeEntryIds), ['time_entry' => $entry]);
+        return $this->PUT('time_entries/'.implode(',', $timeEntryIds), $entry);
     }
 
     /**
@@ -1002,7 +1002,7 @@ class TogglApi
      */
     public function updateTimeEntry($timeEntryId, $entry)
     {
-        return $this->PUT('time_entries/'.$timeEntryId, ['time_entry' => $entry]);
+        return $this->PUT('time_entries/'.$timeEntryId, $entry);
     }
 
     /**
