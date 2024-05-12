@@ -24,39 +24,36 @@ class TogglReportsApi
     protected $client;
 
     /**
+     * @var mixed
+     */
+    private $workspaceId;
+
+    /**
      * TogglReportsApi constructor.
      *
      * @param string $apiToken
      */
-    public function __construct($apiToken)
+    public function __construct($apiToken, $workspaceId)
     {
         $this->apiToken = $apiToken;
+        $this->workspaceId = $workspaceId;
         $this->client = new Client([
-            'base_uri' => 'https://api.track.toggl.com/reports/api/v2/',
+            'base_uri' => 'https://api.track.toggl.com/reports/api/v3/',
             'auth' => [$this->apiToken, 'api_token'],
         ]);
     }
 
     /**
-     * Get available endpoints.
+     * Get summary project report.
      *
-     * @return bool|mixed|object
-     */
-    public function getAvailableEndpoints()
-    {
-        return $this->get('');
-    }
-
-    /**
-     * Get project report.
-     *
+     * @param int $projectId
      * @param string $query
      *
      * @return bool|mixed|object
      */
-    public function getProjectReport($query)
+    public function getSummaryProjectReport($projectId, $query)
     {
-        return $this->get('project', $query);
+        return $this->post("workspace/{$this->workspaceId}/projects/{$projectId}/summary", $query);
     }
 
     /**
@@ -68,7 +65,7 @@ class TogglReportsApi
      */
     public function getSummaryReport($query)
     {
-        return $this->get('summary', $query);
+        return $this->post("workspace/{$this->workspaceId}/summary/time_entries", $query);
     }
 
     /**
@@ -80,7 +77,7 @@ class TogglReportsApi
      */
     public function getDetailsReport($query)
     {
-        return $this->get('details', $query);
+        return $this->post("workspace/{$this->workspaceId}/search/time_entries", $query);
     }
 
     /**
@@ -92,7 +89,7 @@ class TogglReportsApi
      */
     public function getWeeklyReport($query)
     {
-        return $this->get('weekly', $query);
+        return $this->post("workspace/{$this->workspaceId}/weekly/time_entries", $query);
     }
 
     /**
@@ -118,23 +115,24 @@ class TogglReportsApi
     }
 
     /**
-     * Helper for client post command.
+     * Wrapper for client post command.
      *
      * @param string $endpoint
+     * @param array $body
      * @param array $query
      *
      * @return bool|mixed|object
      */
-    private function POST($endpoint, $query = array())
+    private function POST($endpoint, $body = array(), $query = array())
     {
         try {
-            $response = $this->client->post($endpoint, ['query' => $query]);
+            $response = $this->client->post($endpoint, ['body' => json_encode($body), 'query' => $query]);
 
             return $this->checkResponse($response);
         } catch (ClientException $e) {
             return (object) [
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => $e->getResponse()->getBody()->getContents(),
             ];
         }
     }
