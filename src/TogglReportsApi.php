@@ -44,15 +44,16 @@ class TogglReportsApi
     }
 
     /**
-     * Get project report.
+     * Get summary project report.
      *
+     * @param int $projectId
      * @param string $query
      *
      * @return bool|mixed|object
      */
-    public function getProjectReport($query)
+    public function getSummaryProjectReport($projectId, $query)
     {
-        return $this->get('project', $query);
+        return $this->post("workspace/{$this->workspaceId}/projects/{$projectId}/summary", $query);
     }
 
     /**
