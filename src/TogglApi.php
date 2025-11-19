@@ -618,19 +618,6 @@ class TogglApi
     }
 
     /**
-     * Get projects.
-     *
-     * @param int   $workspaceId
-     * @param array $options
-     *
-     * @return bool|mixed|object
-     */
-    public function getProjects($options = [])
-    {
-        return $this->GET("workspaces/{$this->workspaceId}/projects", $options);
-    }
-
-    /**
      * Get workspace tasks.
      *
      * @param array $options
@@ -976,7 +963,7 @@ class TogglApi
      */
     public function updateTimeEntry($timeEntryId, $entry)
     {
-        return $this->PUT('time_entries/'.$timeEntryId, $entry);
+        return $this->PUT("workspaces/{$this->workspaceId}/time_entries/".$timeEntryId, $entry);
     }
 
     /**
@@ -988,7 +975,7 @@ class TogglApi
      */
     public function deleteTimeEntry($timeEntryId)
     {
-        return $this->DELETE('time_entries/'.$timeEntryId);
+        return $this->DELETE("workspaces/{$this->workspaceId}/time_entries/".$timeEntryId);
     }
 
     /**
